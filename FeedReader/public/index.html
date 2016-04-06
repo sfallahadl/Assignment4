@@ -227,7 +227,7 @@ var loadMySubs = function()
       {
         var aFeed = mySubs[i];
         links[i] = aFeed.link;
-        markUp += "<a href='javascript:contentOfSubscription(" + i + ")' class='listItem'>" + aFeed.id + " : " + aFeed.link + date+" </a>";
+        markUp += "<a href='javascript:contentOfSubscription(" + i + ")' class='listItem'>" + aFeed.id + " : " + date + " " + aFeed.link +" </a>";
 
       }
       document.getElementById("myFeedList").innerHTML = markUp;
