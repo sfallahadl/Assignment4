@@ -10,7 +10,7 @@
     <script src="scripts/moment.js"></script>
     <script src='scripts/md5.js'> </script>
     <script src="scripts/moment-with-locales.js"></script>
-    <script src='uaSpoofing.js'> </script>
+    <script src='scripts/uaSpoofing.js'> </script>
     <script src="scripts/script.js"></script>
 
     <link rel="stylesheet" href="css/ply.css" type="text/css" />
@@ -29,6 +29,17 @@ var description = [], links = [], theTitle = [];
 
 var date = moment().format('L');
 
+var AI = {
+  show: function(){
+    var mu = "<div class='acInd fadeBox'>"+
+      '<div class="theSpinner"> </div>' +
+      "</div>";
+    document.body.innerHTML += mu;
+  },
+  hide:function(){
+    $(".acInd").remove();
+  }
+}
 
 var showLoginModal = function()
 {
@@ -118,8 +129,8 @@ var jReject = function()
 {
    $.reject({  
           reject: { 
-            chrome: false
-            
+            chrome: false,
+            msie: 8
           }  
     });  
 }
@@ -220,7 +231,12 @@ var loadMySubs = function()
 
       }
       document.getElementById("myFeedList").innerHTML = markUp;
+           if(ENV.screen.small){
+        $("#currFeedWrapper, #selFeedWrapper").fadeOut();
+        $("#myFeedWrapper").fadeIn();
+      }
     }
+    //}
   });
 }
 var addFeed = function()
@@ -284,6 +300,8 @@ var contentOfSubscription = function(pointer)
 
           document.getElementById("feedDetails").innerHTML = "";
           document.getElementById("currFeedList").innerHTML = theTitle;
+
+
       }
       else if(thePosts.length == 0)
       {
@@ -292,6 +310,20 @@ var contentOfSubscription = function(pointer)
 
   });
 
+}
+
+function backToMyFeeds(){
+      if(ENV.screen.small){
+        $("#currFeedWrapper, #selFeedWrapper").fadeOut();
+        $("#myFeedWrapper").fadeIn();
+      }
+}
+function backToCurrFeeds()
+{
+      if(ENV.screen.small){
+        $("#myFeedWrapper, #selFeedWrapper").fadeOut();
+        $("#currFeedWrapper").fadeIn();
+      }
 }
   </script>
   <style>
@@ -372,6 +404,7 @@ var contentOfSubscription = function(pointer)
     <div id='currFeedList'> </div>
  </div>
   <div id='selFeedWrapper'> 
+      <a href='javascript:backToCurrFeeds()' class='backButton'> Back </a>
     <h1> </h1>
     <div id='feedDetails'> </div>
   </div>
