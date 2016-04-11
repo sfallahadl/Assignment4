@@ -233,7 +233,7 @@ var loadMySubs = function()
 
       }
       document.getElementById("myFeedList").innerHTML = markUp;
-           if(ENV.screen.small){
+      if(ENV.screen.small){
         $("#currFeedWrapper, #selFeedWrapper").fadeOut();
         $("#myFeedWrapper").fadeIn();
       }
@@ -264,46 +264,73 @@ var addFeed = function()
 
 var showDescription = function(pointer)
 {
-  document.getElementById("feedDetails").innerHTML = description[pointer];
+  document.getElementById("selFeedWrapper").innerHTML = description[pointer];
+   //document.getElementById("selFeedWrapper").innerHTML = markUp;
+   "<a href='javascript:backToCurrFeeds()' class='backButton'> Back </a>";
+   if(ENV.screen.small){
+    $("#myFeedWrapper, #currFeedWrapper").fadeOut();
+    $("#selFeedWrapper").fadeIn();
+  }
+    AI.hide();
 }
 
 var contentOfSubscription = function(pointer)
 {
-  theTitle = [];
+  var theTitle = "";
   var url = "./getAllPosts?link=" + links[pointer];
   console.log(url);
+
   loadURL(url, function(data)
   {
       var thePosts = JSON.parse(data);
       var numberOfPosts = thePosts.feed.entry.length
       myposts = thePosts;
+
       if(thePosts.length != 0)
       {
         for(var i = 0; i < numberOfPosts; i++)
         {
           var aFeed = thePosts;
+
           if(JSON.stringify(aFeed.feed.entry[i].summary) != null)
           {
             
             description[i] = JSON.stringify(aFeed.feed.entry[i].summary.label);
           }
+
           else
           {
             description[i] = "There is no summary for this Feed"
           }
-          theTitle.push(("<a  href = javascript:showDescription(" + i + ")>" + JSON.stringify(aFeed.feed.entry[i].title.label) +  "</a>"));
+
+
+          theTitle += ("<a  href = javascript:showDescription(" + i + ")>" + JSON.stringify(aFeed.feed.entry[i].title.label) + "</br>"+ "</a>");
+
         }
-          document.getElementById("feedDetails").innerHTML = "";
+
+          document.getElementById("selFeedWrapper").innerHTML = "";
           document.getElementById("currFeedList").innerHTML = theTitle;
+
+        // document.getElementById("currFeedWrapper").innerHTML = markUp;
+    "<a href='javascript:backToMyFeeds()' class='backButton'> Back </a>";
+    if(ENV.screen.small){
+      $("#myFeedWrapper, #selFeedWrapper").fadeOut();
+      $("#currFeedWrapper").fadeIn();
+    }
+      AI.hide();
+
       }
       else if(thePosts.length == 0)
       {
         alert("There are no posts");
       }
+
   });
+
 }
+
 function backToMyFeeds(){
-      if(ENV.screen.small){
+        if(ENV.screen.small){
         $("#currFeedWrapper, #selFeedWrapper").fadeOut();
         $("#myFeedWrapper").fadeIn();
       }
@@ -323,7 +350,7 @@ function backToCurrFeeds()
   body{
     margin: 0px;
    }
-  .bigScreen #myFeedWrapper, .bigScreen #currFeedWrapper{
+   .bigScreen #myFeedWrapper, .bigScreen #currFeedWrapper{
     width: 25%;
   }
   .smallScreen #myFeedWrapper, .smallScreen #currFeedWrapper{
@@ -334,14 +361,12 @@ function backToCurrFeeds()
     width: 100%;
     position: absolute;
   }
-
   .bigScreen #selFeedWrapper{
     width: 48%;
   }
   a:link
   {
     color: white;
-
     text-decoration: none;
   }
   #myFeedWrapper, #currFeedWrapper{
@@ -360,6 +385,17 @@ function backToCurrFeeds()
   }
    .bigScreen .backButton{
     display: none;
+  }
+
+  .smallScreen .backButton {
+     padding: 5px;
+            background-color: #000000;
+            color: white;
+            border: 1px solid;
+            border-radius: 5px;
+            border-color: #D0D0D0;
+            text-decoration: none;
+
   }
   .fadeBox{
     position: fixed;
@@ -384,13 +420,14 @@ function backToCurrFeeds()
             border-radius: 5px;
             border-color: #D0D0D0;
         }
-    
+
   </style>
 </head>
 
 <body onload='startUp()'> 
    <div id="loginBar">
       <div style="float: left;"><a id="loginButton" href="javascript:showLoginModal()" class="button">Login</a></div>
+      <div style="float: left;"><a href="javascript:backToMyFeeds()" class="backButton">Back</a></div>
       <div style="float: right;"><a id="signUpButton"  href="javascript:showSignUp()" class="button" >Sign Up</a></div>
     </div>
   <div id='myFeedWrapper'>
@@ -403,7 +440,6 @@ function backToCurrFeeds()
     <div id='currFeedList'> </div>
  </div>
   <div id='selFeedWrapper'> 
-      <a href='javascript:backToCurrFeeds()' class='backButton'> Back </a>
     <h1> </h1>
     <div id='feedDetails'> </div>
   </div>
