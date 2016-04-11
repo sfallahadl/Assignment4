@@ -13,7 +13,6 @@
     <script src="scripts/moment-with-locales.js"></script>
     <script src='scripts/uaSpoofing.js'> </script>
     <script src="scripts/script.js"></script>
-    <script src='scripts/offline-simulate-ui.min.js'> </script>
 
     <link rel="stylesheet" href="css/ply.css" type="text/css" />
     <link rel="stylesheet" href="css/jquery.reject.css" type="text/css" />
@@ -273,48 +272,36 @@ var contentOfSubscription = function(pointer)
   theTitle = [];
   var url = "./getAllPosts?link=" + links[pointer];
   console.log(url);
-
   loadURL(url, function(data)
   {
       var thePosts = JSON.parse(data);
       var numberOfPosts = thePosts.feed.entry.length
       myposts = thePosts;
-
       if(thePosts.length != 0)
       {
         for(var i = 0; i < numberOfPosts; i++)
         {
           var aFeed = thePosts;
-
           if(JSON.stringify(aFeed.feed.entry[i].summary) != null)
           {
             
             description[i] = JSON.stringify(aFeed.feed.entry[i].summary.label);
           }
-
           else
           {
             description[i] = "There is no summary for this Feed"
           }
-
           theTitle.push(("<a  href = javascript:showDescription(" + i + ")>" + JSON.stringify(aFeed.feed.entry[i].title.label) +  "</a>"));
-
         }
-
           document.getElementById("feedDetails").innerHTML = "";
           document.getElementById("currFeedList").innerHTML = theTitle;
-
-
       }
       else if(thePosts.length == 0)
       {
         alert("There are no posts");
       }
-
   });
-
 }
-
 function backToMyFeeds(){
       if(ENV.screen.small){
         $("#currFeedWrapper, #selFeedWrapper").fadeOut();
@@ -348,7 +335,9 @@ function backToCurrFeeds()
     position: absolute;
   }
 
-
+  .bigScreen #selFeedWrapper{
+    width: 48%;
+  }
   a:link
   {
     color: white;
@@ -357,7 +346,6 @@ function backToCurrFeeds()
   }
   #myFeedWrapper, #currFeedWrapper{
     display: inline-block;
-    width: 25%;
     vertical-align: top;
     word-wrap: normal;
     background: #0558FF;
@@ -365,11 +353,19 @@ function backToCurrFeeds()
   }
   #selFeedWrapper{
     display: inline-block;
-    width: 45%;
     vertical-align: top;
     word-wrap: break-word;
     background: #0558FF;
     min-height: 100%;
+  }
+   .bigScreen .backButton{
+    display: none;
+  }
+  .fadeBox{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,.4);
   }
   .button {
             padding: 5px;
